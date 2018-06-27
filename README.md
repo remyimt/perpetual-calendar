@@ -20,10 +20,11 @@ This is how I build my own perpetual calendar from my pictures. It took time for
 * In the [horizontal/jpeg](horizontal/jpeg) folder, I put my pictures. I add the date of the day (MM\_DD) in front of the filename to keep pictures organized.
 * In the [horizontal/xcf](horizontal/xcf) folder, I create one XCF file for every day of the year with the right picture. I start by duplicating the horizontal template and I change the picture and the date. The XCF filename is related to the date of the day (MM\_DD.xcf).
 * I create 366 XCF files from my pictures with the right dates (very long process).
-* I use the gimp plugin (dpb) to export XCF files to JPEG files in the [JPEG/](JPEG) folder.
+* I use the gimp plugin (dpb) to export XCF files to JPEG files (with .jpg extension) in the [JPEG/](JPEG) folder.
 * I run the jpeg2pdf.sh script to create the final PDF with all pictures.
 
 ### Notes
+* **Generated JPEG files must have .jpg extensions**
 * You can export XCF files to JPEG files manually but it requires lot of time. The gimp plugin automates the export of the 366 XCF files:
   * In the gimp menu, run Filters > Batch process...
   * Input Tab > Add files

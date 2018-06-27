@@ -61,10 +61,20 @@ function prev {
   echo "$(number_format $month)_$(number_format $day)"
 }
 
+# clean option
+if [ "$1" == "clean" ]; then
+  echo "rm $JPEG_DIR/*.jpg"
+  rm -f $JPEG_DIR/*.jpg
+  echo "rm $JPEG_DIR/*.jpg"
+  rm -f $PDF_DIR/*.pdf
+  echo "rm $ALL_PDF"
+  rm -f $ALL_PDF
+  exit
+fi
+
 # Convert JPEG to PDF
 cd $JPEG_DIR
-for pic in $(ls); do
-#for pic in $(ls | head -n 2); do
+for pic in *.jpg; do
   name=$(basename $pic $EXTENSION)
   pdf_name=$CURRENT/$PDF_DIR/$name.pdf
   if [ -e $pdf_name ]; then
@@ -78,7 +88,9 @@ done
 # Merge PDF
 cd $CURRENT/$PDF_DIR
 if [ ! -e ../$ALL_PDF ]; then
-  nb_pdf=$(ls | wc -l)
+  find -name "*.pdf" -printf '%P\n' | sort > pdf_files.txt
+  cat pdf_files.txt
+  nb_pdf=$(cat pdf_files.txt | wc -l)
   if [ $nb_pdf -lt 2 ]; then
     echo "The script requires at least 2 PDF files (Nb. of detected files: $nb_pdf)."
     exit
@@ -86,29 +98,28 @@ if [ ! -e ../$ALL_PDF ]; then
   echo "Merging all PDF to ../$ALL_PDF"
   if [ -z "$1" ]; then
     ## Create a PDF to display (chronological order)
-    pdftk $(ls) cat output ../$ALL_PDF
+    pdftk $(cat pdf_files.txt) cat output ../$ALL_PDF
   else
     ## Create a PDF to print the calendar (two-sided document)
     # Get the name of the first file
-    recto=$(ls ../$PDF_DIR | head -n 1)
+    recto=$(cat pdf_files.txt | head -n 1)
     # Remove the extension
     recto="${recto%.*}"
     # Get the name of the last file
-    verso=$(ls ../$PDF_DIR | tail -n 1)
+    verso=$(cat pdf_files.txt | tail -n 1)
     # Remove the extension
     verso="${verso%.*}"
     # Merge PDF files to the final PDF
     dates=""
     nb_pdf=$(( $nb_pdf / 2 ))
-    echo $recto $verso
     for i in $(seq 1 $nb_pdf); do
       dates="$dates $recto.pdf $verso.pdf"
       recto=$(next $recto)
       verso=$(prev $verso)
     done
-    echo $dates
     pdftk $dates cat output ../$ALL_PDF
   fi
+  rm pdf_files.txt
 else
   echo "File ../$ALL_PDF already exists!"
 fi
