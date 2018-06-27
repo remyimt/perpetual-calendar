@@ -1,0 +1,5 @@
+sudo dpkg -i libgcj-common_6.4-3ubuntu1_all.deb
+sudo dpkg -i libgcj17_6.4.0-8ubuntu1_amd64.deb
+sudo apt install --fix-broken
+sudo dpkg -i pdftk_2.02-4build1_amd64.deb
+

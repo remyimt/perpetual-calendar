@@ -1,0 +1,5 @@
+http://members.ozemail.com.au/~hodsond/dbp.html
+
+sudo apt install libgimp2.0-dev build-essential
+cd dbpSrc-1-1-9
+make install
